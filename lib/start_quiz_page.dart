@@ -9,9 +9,28 @@ const Alignment alignmentTopLeft = Alignment.topLeft;
 const Alignment alignmentBottomRight = Alignment.bottomRight;
 
 
-class StartingPage extends StatelessWidget {
+class StartingPage extends StatefulWidget {
   StartingPage({super.key});
- 
+
+  @override
+  State<StartingPage> createState() => _StartingPageState();
+}
+
+class _StartingPageState extends State<StartingPage> {
+  Widget? activeScreen;
+
+  @override
+  void initState() {
+    super.initState();
+    activeScreen = StartWidget(switchScreen);
+  }
+
+  void switchScreen() {
+    setState(() {
+      activeScreen = 
+       QuizWidget();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +45,7 @@ class StartingPage extends StatelessWidget {
         )
       ),
       child: Center(
-      child: StartWidget()
+      child: activeScreen
               ));
   }
 }
