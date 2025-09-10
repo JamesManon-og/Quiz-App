@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:magic_ball/data/questions.dart';
 import 'screens/quiz.dart';
 import 'screens/start.dart';
 import 'screens/result.dart';
@@ -18,36 +19,46 @@ class StartingPage extends StatefulWidget {
 
 class _StartingPageState extends State<StartingPage> {
   Widget? activeScreen;
+List<String> selectedAnswers = [];
 
   @override
   void initState() {
-    super.initState();
     activeScreen = StartWidget(switchScreen);
+    super.initState();
   }
 
   void switchScreen() {
     setState(() {
-      activeScreen = 
-       QuizWidget();
+      activeScreen = QuizWidget(
+        onSelectAnswer: chooseAnswer,
+      );
     });
+  }
+
+  void chooseAnswer(String answer) {
+    selectedAnswers.add(answer);
+    if (questions.length == selectedAnswers.length) {
+      setState(() {
+        activeScreen = ResultWidget(selectedAnswers);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [
-          const Color.fromARGB(255, 47, 3, 55),
-          Colors.blue.shade400,
-        ],
-        begin: alignmentTopLeft,
-        end: alignmentBottomRight
-        )
+    return MaterialApp(
+      home: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Colors.pink],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: activeScreen,
+        ),
       ),
-      child: Center(
-      child: activeScreen
-              ));
+    );
   }
 }
-
-

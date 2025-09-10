@@ -4,7 +4,8 @@ import 'package:magic_ball/widgets/answer_button.dart';
 
 
 class QuizWidget extends StatefulWidget {
-  const QuizWidget({super.key});
+  const QuizWidget({super.key, required this.onSelectAnswer});
+  final void Function(String answer) onSelectAnswer;
 
   @override
   State<QuizWidget> createState() => _QuizWidgetState();
@@ -12,7 +13,8 @@ class QuizWidget extends StatefulWidget {
 
 class _QuizWidgetState extends State<QuizWidget> {
   var currentQuestionIndex = 0;
-  void answerQuestion() {
+  void answerQuestion(String answer) {
+    widget.onSelectAnswer(answer);
     setState(() {
       currentQuestionIndex++;
     });
@@ -39,10 +41,12 @@ class _QuizWidgetState extends State<QuizWidget> {
           const SizedBox(height: 20),
           //spread operator
           ...currentQuestion.getShuffledAnswers().map((answer) {
-            return AnswerButton(answer, answerQuestion);
-          }),
-        ],
-      ),
-    );
+           return AnswerButton(answer, () {
+              answerQuestion(answer);
+           });
+         }),
+       ],
+     ),
+   );
   }
 }
